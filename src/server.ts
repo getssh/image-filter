@@ -36,8 +36,8 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       res.status(404).send("Wrong query parameter used");
       return;
     }
-    if (!queryValue || !queryValue.startsWith('http')) {
-      res.status(404).send("Valid Image url is needed");
+    if (!queryValue || !queryValue.toString().startsWith('http')) {
+      res.status(422).send("Valid Image url is needed");
       return;
     }
     console.log(qName);
