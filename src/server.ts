@@ -33,17 +33,19 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     const qName = Object.keys(queryName)[0];
     const queryValue = req.query.image_url;
     if (qName != "image_url") {
-      res.status(404).send({message: "Wrong query parameter used"});
+      res.status(404).send("Wrong query parameter used");
       return;
     }
-    // if (!qName.startsWith('http')) {
-    //   res.status(404).send({message: "Invalid Web address"});
-    //   return;
-    // }
+    if (!queryValue || !queryValue.startsWith('http')) {
+      res.status(404).send("Valid Image url is needed");
+      return;
+    }
     console.log(qName);
     console.log(req.query)
     const filterImg = await filterImageFromURL(queryValue.toString());
-    res.sendFile(filterImg);
+    res.status(200).sendFile(filterImg, () => {
+      deleteLocalFiles([filterImg]);
+    });
     // deleteLocalFiles([filterImg]);
   });
   //! END @TODO1
